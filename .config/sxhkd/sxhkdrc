@@ -1,0 +1,107 @@
+# MISC #
+super + Escape
+	pkill -USR1 -x sxhkd
+
+# LAUNCHING THINGS #
+
+super + Return
+	st
+
+super + r
+	firefox
+
+super + w
+	vivaldi-stable
+
+# UTILITIES #
+
+alt + t
+	notify-send "$(date +'%Y-%m-%d')" "$(date +'%H:%M') \n\n\n$(cal)"
+
+alt + s
+  nsxiv -baiof ~/doc/edu/schedule.png
+
+alt + e
+	emoji
+
+super + d
+  dmenu_run
+
+super + shift + e
+     ~/.local/bin/dmenu-reboot
+
+super + shift + s
+  maim -m 5 -s | xclip -selection clipboard -t image/png
+
+Print
+    scrot $HOME/img/scr/all/screenshot-$(date +%F_%T).png -e 'xclip -selection c -t image/png < $f'
+
+alt + a
+  dmenu-scripts
+
+alt + c
+  dmenu-calc
+
+# BSPWM HOTKEYS #
+
+# close and kill
+super + {_,shift + }q
+	bspc node -{c,k}
+
+# quit/restart bspwm
+super + alt + r
+	bspc {wm -r}
+
+# alternate between the tiled and monocle layout
+super + m
+	bspc desktop -l next
+
+# set the window state
+super + {t,s}
+	bspc node -t {tiled,floating}
+
+# focus the node in the given direction
+super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
+
+# focus the node for the given path jump
+super + {p,b,comma,period}
+	bspc node -f @{parent,brother,first,second}
+
+# send to desktop
+super + {_,shift + }{1-9,0}
+	bspc {desktop -f,node -d} '^{1-9,10}'
+
+# focus the older or newer node in the focus history
+super + {o,i}
+	bspc wm -h off; \
+	bspc node {older,newer} -f; \
+	bspc wm -h on
+
+# preselect the direction
+super + ctrl + {h,j,k,l}
+	bspc node -p {west,south,north,east}
+
+# expand a window by moving one of its side outward
+super + alt + {h,j,k,l}
+	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# contract a window by moving one of its side inward
+super + alt + shift + {h,j,k,l}
+	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+# audio #
+# music is a script written by https://codeberg.org/exorcist that i edited to fit my needs
+
+XF86AudioPlay
+  music toggle && playerctl play-pause && notify-send -et 500 "Audio paused"
+
+XF86AudioRaiseVolume
+  amixer -q set Master 3%+ unmute && vol
+
+XF86AudioLowerVolume
+  amixer -q set Master 3%- unmute && vol
+
+XF86AudioMute
+  amixer -D pulse sset Master toggle-mute && notify-send -et 600 "Audio Muted"
+# vim: ft=config

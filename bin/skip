@@ -1,0 +1,78 @@
+#!/usr/bin/awk -f
+
+#Skip text between two strings
+#https://github.com/phillbush/skip/blob/master/README.md
+#=============================
+#
+#skip removes all of its input that is enclosed by
+#its two arguments. Example:
+#
+#	$ echo '/* comment */ int main(void) { puts("hello world!"); /* print */ return 0; }' | skip '/\*' '\*/'
+#	 int main(void) { puts("hello world!");  return 0; }
+#
+#This is an awk version of [pranomostro/skip](https://github.com/pranomostro/skip).
+#
+#This version of skip is capable of handling regular expressions.
+#So, if the from/to delimiters contain metacharacters, escape them!
+#
+#Usage
+#-----
+#
+#	cat file | skip from to
+#
+#License
+#=======
+#
+#[MIT/X11 license](./LICENSE).
+
+
+function usage() {
+	print "usage: skip from to" >"/dev/stderr"
+	error = 1
+	exit
+}
+
+BEGIN {
+	if (ARGC != 3)
+		usage()
+	from = ARGV[1]
+	to = ARGV[2]
+	ARGC = 1
+}
+
+{
+	while (match($0, from)) {
+		f = RSTART - 1
+		if (match($0, to) == 0)
+			break
+		t = RSTART + RLENGTH
+		if (f < t)
+			$0 = substr($0, 1, f) substr($0, t)
+	}
+}
+
+$0 ~ from {
+	comment = 2
+	sub(from ".*", "")
+}
+
+comment && $0 ~ to {
+	comment = 0
+	sub(".*" to, "")
+}
+
+comment {
+	if (comment == 1)
+		next
+	else
+		comment = 1
+}
+
+{
+	print
+}
+
+END {
+	if (error)
+		exit 1
+}

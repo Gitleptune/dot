@@ -1,0 +1,67 @@
+def_key "j"
+    scroll_down
+
+def_key "k"
+    scroll_up
+
+def_key "G"
+    move_end
+
+def_key "g"
+    move_home
+
+def_key "L"
+    show_lyrics
+
+def_key "space"
+    toggle_visualization_type
+
+def_key "space"
+    pause
+
+def_key "h"
+    previous_column
+
+def_key "l"
+    next_column
+
+def_key "`"
+    refetch_lyrics
+
+def_key "1"
+    show_media_library
+
+def_key "2"
+    show_tag_editor
+
+def_key "3"
+    show_playlist
+
+def_key "4"
+    show_search_engine
+
+def_key "6"
+    show_browser
+
+def_key "m"
+    previous_found_item
+
+def_key "n"
+    next_found_item
+
+def_key "K"
+ move_sort_order_up
+
+def_key "K"
+ move_selected_items_up
+
+def_key "J"
+ move_sort_order_down
+
+def_key "J"
+ move_selected_items_down
+
+def_key "w"
+ run_external_console_command "~/.local/bin/music viewart"
+
+# vim:ft=conf

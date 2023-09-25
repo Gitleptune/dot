@@ -1,0 +1,141 @@
+#!/bin/bash
+
+setup_terminal() {
+    # Setup the terminal for the TUI.
+    # '\e[?1049h': Use alternative screen buffer.
+    # '\e[?7l':    Disable line wrapping.
+    # '\e[?25l':   Hide the cursor.
+    # '\e[2J':     Clear the screen.
+    # '\e[1;Nr':   Limit scrolling to scrolling area.
+    #              Also sets cursor to (0,0).
+    printf '\e[?1049h\e[?7l\e[?25l\e[2J\e[1;%sr' "$max_items"
+
+    # Hide echoing of user input
+    stty -echo
+}
+
+reset_terminal() {
+    # Reset the terminal to a useable state (undo all changes).
+    # '\e[?7h':   Re-enable line wrapping.
+    # '\e[?25h':  Unhide the cursor.
+    # '\e[2J':    Clear the terminal.
+    # '\e[;r':    Set the scroll region to its default value.
+    #             Also sets cursor to (0,0).
+    # '\e[?1049l: Restore main screen buffer.
+    printf '\e[?7h\e[?25h\e[2J\e[;r\e[?1049l'
+
+    # Show user input.
+    stty echo
+}
+
+clear_screen() {
+    # Only clear the scrolling window (dir item list).
+    # '\e[%sH':    Move cursor to bottom of scroll area.
+    # '\e[9999C':  Move cursor to right edge of the terminal.
+    # '\e[1J':     Clear screen to top left corner (from cursor up).
+    # '\e[2J':     Clear screen fully (if using tmux) (fixes clear issues).
+    # '\e[1;%sr':  Clearing the screen resets the scroll region(?). Re-set it.
+    #              Also sets cursor to (0,0).
+    printf '\e[%sH\e[9999C\e[1J%b\e[1;%sr' \
+           "$((LINES-2))" "${TMUX:+\e[2J}" "$max_items"
+}
+
+get_term_size() {
+    # Get terminal size ('stty' is POSIX and always available).
+    # This can't be done reliably across all bash versions in pure bash.
+    read -r LINES COLUMNS < <(stty size)
+
+    # Max list items that fit in the scroll area.
+    # you can adjust this to make the cover art fit better
+    ((max_items=LINES-2))
+}
+
+landscape() {
+    printf '\e[1:00H \e[0;27m' | cat <<EOF
+
+                   \       /            _\/_
+                     .-'-.              //o\  _\/_
+  _  ___  __  _ --_ /     \ _--_ __  __ _ | __/o\\ _
+=-=-_=-=-_=-=_=-_= -=======- = =-=_=-=_,-'|"'""-|-,_
+ =- _=-=-_=- _=-= _--=====- _=-=_-_,-"          |
+jgs=- =- =-= =- = -  -===- -= - ."
+
+EOF
+}
+
+lipstick() {
+    ## AUDIO FILE TAGS
+    while IFS='=' read -r xx yy; do
+            case $xx in
+                title) title=$yy ;;
+                artist) artist=$yy ;;
+            esac
+         done < /tmp/oo.txt
+
+    printf '\e[%sH\e[7;1m%*s\r%s %s\e[%sH' \
+           "$LINES" \
+           "$COLUMNS" "" "" \
+           "$title - $artist"
+}
+
+makeup() {
+    img2sixel "/tmp/oo.jpg" \
+    -w 161 -h 156 \
+    --builtin-palette=xterm256
+
+    ## FORCE MPV CLI TIMESTAMP POSITION
+
+    # for the timestamp to fit in the bottom,
+    # negate current number of lines of terminal
+    # with the value of 14.
+    xx=$(( "$LINES" + 10))
+
+    printf "\033[2K\e[0;0m%*s\e[$xx""B"
+    # '\033[2K'    clear line above timestamp
+    #              (remove the weird @!4923jwha/3ver output)
+    # '\e[0;0m'    foreground and background text color setting
+    # '%*s'        insert enough spaces to fill screen width
+    # '\e[1B'      move cursor to bottom in value of 1
+    # ""           close quotes for the variable: xx to send its
+    #              output of value to the cursor format: B
+}
+
+haircomb() {
+    ffmpeg -y -i \
+    "$@" -f ffmetadata /tmp/oo.txt \
+    -- /tmp/oo.jpg \
+    -loglevel quiet
+
+    mpv --no-audio-display \
+    --msg-level=all=no,statusline=debug "$@"
+
+    # break loop for those who don't use a file manager
+    trap "exit" SIGINT
+
+    # pick a random file in current dir
+    shuffle=$(find "$PWD" -type f -iname '*.mp3' | shuf -n 1)
+}
+
+replay() {
+    # allow mpv cli instance to
+    # interact with resize events
+    haircomb "$@"
+    while true; do haircomb "$shuffle"; done
+}
+
+main() {
+    trap 'reset_terminal' EXIT
+    trap 'get_term_size; clear_screen; landscape' WINCH
+
+    setup_terminal
+    clear_screen
+    landscape
+
+    replay "$@" &
+
+    for ((;;)); {
+        sleep 0.4s && lipstick; makeup
+    }
+}
+
+main "$@"

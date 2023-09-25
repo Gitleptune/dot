@@ -1,0 +1,16 @@
+-4
+-ix
+-f "bestaudio/best"
+--progress
+--add-metadata
+--console-title
+--embed-thumbnail
+--audio-quality "0"
+--audio-format "mp3"
+# --proxy socks5://127.0.0.1:9050
+--parse-metadata "artist:%(album_artist)s"
+--parse-metadata "playlist_index:%(track_number)s"
+--ppa "EmbedThumbnail+ffmpeg_o:-c:v png -vf crop=\"'if(gt(ih,iw),iw,ih)':'if(gt(iw,ih),ih,iw)'\""
+--output "~/mus/%(title)s.%(ext)s"
+
+# vim:ft=conf

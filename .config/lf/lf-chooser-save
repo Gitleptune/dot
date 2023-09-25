@@ -1,0 +1,15 @@
+# lfchooser
+
+source "~/.config/lf/lfrc"
+map <enter> ${{
+    filenamemsg="Name: "
+    if [ -n "$basename" ]; then
+        filenamemsg="Name [$basename]: "
+    fi
+    read -p "$filenamemsg" s
+    n="${s:-$basename}"
+    if [ -n "$n" ]; then
+        echo $(realpath $(pwd))/"$n"
+    fi
+    lf -remote "send $id :quit"
+}}

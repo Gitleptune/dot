@@ -1,0 +1,13 @@
+#!/bin/sh
+
+lfcd() {
+	LF_CD_TEMPDIR="$(mktemp -d -t lf-cd-XXXXXX)"
+	export LF_CD_TEMPDIR
+	$HOME/.config/lf/lfub -last-dir-path "$LF_CD_TEMPDIR/lastdir"
+	if [ -e "$LF_CD_TEMPDIR/changecwd" ] && \
+		dir="$(cat "$LF_CD_TEMPDIR/lastdir")" 2>/dev/null; then
+		cd "$dir"
+	fi
+	\rm -rf "$LF_CD_TEMPDIR"
+	unset LF_CD_TEMPDIR
+}

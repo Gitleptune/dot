@@ -1,0 +1,16 @@
+#!/bin/sh
+
+choice=$(echo -e "y\nn" | dmenu -p "Do you want to reboot?")
+
+case "$choice" in
+    "y")
+        echo "Shutting down the system..."
+        systemctl reboot
+        ;;
+    "n")
+        echo "Shutdown aborted."
+        ;;
+    *)
+        echo "Invalid choice: $choice"
+        ;;
+esac

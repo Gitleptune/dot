@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# emoji picker dmenu
+# dependencies
+## jq
+## xclip
+## dmenu
+## tr
+## /assets/emojis.json
+
+dir="$(dirname "$(realpath "$0")")/assets/emojis.json"
+path="$dir"
+
+if [ ! -e "$path" ]; then
+  echo "[!] emojis.json not found"
+  exit 1
+fi
+
+jq -r '.[] | .character + " " + .unicodeName' "$path" |
+  dmenu |
+  awk '{print $1}' |
+  tr -d '\n' |
+  xclip -selection clipboard

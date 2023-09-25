@@ -1,0 +1,24 @@
+#! /bin/bash
+
+echo -e "\n\n\n\033[1;33m"
+for file in "$@"
+do
+  fileName=$(basename "$file")
+
+  if [ -d "$file" ]
+  then
+    echo -e "$fileName  $(du -sh "$file" | awk '{print $1}')"
+    continue
+  fi
+
+  echo -e "$fileName  $(du -sh "$file" | awk '{print $1}')"
+done | cowsay -f small -n -W 55
+
+echo -e "\033[1;31m"
+read -p "delete? [y/n]: " ans
+[ "$ans" = "y" ] && 
+  for file in "$@"
+  do
+    rm -rf "$file"
+  done
+  echo -e "\033[0m"

@@ -1,0 +1,132 @@
+#!/bin/sh
+
+musicdir="~/mus"
+previewdir="$HOME/.config/ncmpcpp/previews"
+filename="$(mpc --format "$musicdir/%file%" current)"
+coverart="$previewdir/$(mpc --format "%album%" current | tr '[:upper:]' '[:lower:]' | tr -d " ").png"
+
+current() {
+    [ -d "$previewdir" ] || mkdir -p "$previewdir"
+    [ -e "$coverart" ] || ffmpeg -y -i "$filename" -an "$coverart" >"/dev/null" 2>&1
+
+    notify-send -r 69420 -i "$coverart" -u "low" "Now playing:" "$(mpc --format "%title% from\n%album% by %artist%" current)"
+}
+
+viewart() {
+    setsid -f nsxiv -b "$coverart" >"/dev/null" 2>&1
+}
+
+search() {
+    song="$(mpc ls | grep -i "$@" | head -n1)"
+    mpc -q searchplay filename "$song" && notify
+}
+
+next() {
+    mpc -q next && notify
+}
+
+notify() {
+    [ ! "$(pidof "${MUSIC:="$(command -v ncmpcpp)"}")" ] && notify-send -t 900 -u "low" "Now playing:" "$(mpc current)"
+}
+
+pause() {
+    [ "$(mpc | grep -i "playing")" ] && mpc -q toggle && notify-send -t 900 -u "low" "Track paused!"
+}
+
+pick() {
+    song="$(mpc ls | grep -vi "m3u" | dmenu -i -F -h 30 -l 10 -p "Pick a song:")"
+    [ -z "$song" ] && exit 1
+    mpc -q searchplay filename "$song" && notify
+}
+
+play() {
+    [ "$(mpc | grep -i "paused\|")" ] && mpc -q toggle && notify-send -t 900 -u "low" "Track started!"
+}
+
+prev() {
+    mpc -q prev && notify
+}
+
+repeat() {
+    mpc -q repeat >"/dev/null" && notify-send -t 900 -u "low" "Repeat $(mpc | grep -i "repeat" | cut -d ":" -f3 | cut -d " " -f2)!"
+}
+
+single() {
+    mpc -q single >"/dev/null" && notify-send -t 900 -u "low" "Single $(mpc | grep -i "single" | cut -d ":" -f5 | cut -d " " -f2)!"
+}
+
+stop() {
+    [ "$(mpc | grep -io '\[.*\]')" ] && mpc -q stop && notify-send -t 900 -u "low" "Track stopped!"
+}
+
+info() {
+    case "$(mpc status | grep -i "playing\|paused")" in
+        *playing*)
+            notify-send -t 900 -u "low" "Track started!"
+            ;;
+        *paused*)
+            notify-send -t 900 -u "low" "Track paused!"
+            ;;
+    esac
+}
+
+toggle() {
+    if [ "$(mpc | grep -i "paused\|n/a")" ]
+    then
+        mpc -q toggle && notify-send -t 900 -u "low" "Track started!"
+    elif [ "$(mpc | grep -i "playing")" ]
+    then
+        mpc -q toggle && notify-send -t 900 -u "low" "Track paused!"
+    fi
+
+}
+
+main() {
+    [ -z "$@" ] && exit 1
+
+    case "$@" in
+        current|curr)
+            current
+            ;;
+        next|up)
+            next
+            ;;
+        pause)
+            pause
+            ;;
+        pick|choose)
+            pick
+            ;;
+        play)
+            play
+            ;;
+        prev|down)
+            prev
+            ;;
+        repeat|rep)
+            repeat
+            ;;
+        single|s)
+            single
+            ;;
+        stop)
+            stop
+            ;;
+        toggle|t)
+            toggle
+            ;;
+        info)
+            info
+            ;;
+        art|viewart)
+            viewart
+            ;;
+        *)
+            search "$@"
+            ;;
+    esac # >"/dev/null" 2>&1
+}
+
+main "$@"
+
+# vim:ft=sh

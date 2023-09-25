@@ -1,0 +1,5 @@
+#!/bin/sh
+Equation=$(<&- | dmenu -n -p "Enter equation" | xargs -I % calc %)
+
+# Copy the result to the clipboard using xclip
+echo -n "$Equation" | xclip -selection clipboard && notify-send "Result" "$Equation"

@@ -1,0 +1,299 @@
+# vim: filetype=bash
+############
+# settings #
+############
+
+set shell bash
+set incsearch
+set shellopts '-eu'
+set tabstop 2
+set ifs "\n"
+set hidden false
+set scrolloff 7
+set ratios 2:5:7
+set mouse
+set period 1
+set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml:!.config"
+set cleaner '~/.config/lf/cleaner'
+set previewer '~/.config/lf/scope'
+set autoquit true
+set info size
+#set drawbox
+&[ $LF_LEVEL -eq 1 ] || lf -remote "send $id echoerr \"Warning: You're in a nested lf instance!\""
+
+set promptfmt        "🌻 \033[34m%d\033[0m%f"
+set errorfmt         "\033[31;1m%s\033[0m"
+set cursorpreviewfmt "\033[7m"
+set timefmt          "2006-01-02 15:04"
+set infotimefmtnew   "2006-01-02 15:04"
+set infotimefmtold   "2006-01-02 15:04"
+set rulerfmt         "%a  |%p  |\033[7;31m %m \033[0m  |\033[7;33m %c \033[0m  |\033[7;35m %s \033[0m  |\033[7;34m %f \033[0m  |[%i/%t]"
+set statfmt          "\033[01m%p\033[0m"
+
+
+############
+# commands #
+############
+
+cmd piko %{{
+  piko $f
+}}
+
+cmd chmodx %{{
+  if [ -x $f ];
+    then chmod -x "$f"
+    else chmod +x "$f"
+  fi
+  lf -remote "send $id :reload"
+}}
+
+# nsxiv-np is a script to allow pressing n/p and going through the whole directory
+cmd open ${{
+    case $(file --mime-type "$(readlink -f $f)" -b) in
+	application/vnd.openxmlformats-officedocument.spreadsheetml.sheet) localc $fx ;;
+	image/vnd.djvu|application/pdf|application/octet-stream|application/postscript) setsid -f zathura $fx >/dev/null 2>&1 ;;
+        text/*|application/json|inode/x-empty|application/x-subrip) $EDITOR $fx;;
+	image/x-xcf) setsid -f gimp $f >/dev/null 2>&1 ;;
+	image/svg+xml) display -- $f ;;
+	image/*) nsxiv-np $f | grep -i "\.\(png\|jpg\|jpeg\|gif\|webp\|xpm\|avif\|tif\|ico\)\(_large\)*$" |
+		setsid -f nsxiv -aiof 2>/dev/null | while read -r file; do
+			[ -z "$file" ] && continue
+			lf -remote "send select \"$file\""
+			lf -remote "send toggle"
+		done &
+		;;
+	audio/*|video/x-ms-asf) mpv --audio-display=no $f ;;
+  font/*) fp $f;;
+	video/*) setsid -f mpv $f -quiet >/dev/null 2>&1 ;;
+	application/pdf|application/vnd.djvu|application/epub*) setsid -f zathura $fx >/dev/null 2>&1 ;;
+	application/pgp-encrypted) $EDITOR $fx ;;
+  application/x-font-ttf|application/x-font-otf) fp $fx ;;
+	application/vnd.openxmlformats-officedocument.wordprocessingml.document|application/vnd.oasis.opendocument.text|application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|application/octet-stream|application/vnd.oasis.opendocument.spreadsheet|application/vnd.oasis.opendocument.spreadsheet-template|application/vnd.openxmlformats-officedocument.presentationml.presentation|application/vnd.oasis.opendocument.presentation-template|application/vnd.oasis.opendocument.presentation|application/vnd.ms-powerpoint|application/vnd.oasis.opendocument.graphics|application/vnd.oasis.opendocument.graphics-template|application/vnd.oasis.opendocument.formula|application/vnd.oasis.opendocument.database) setsid -f libreoffice $fx >/dev/null 2>&1 ;;
+        *) for f in $fx; do setsid -f $OPENER $f >/dev/null 2>&1; done;;
+    esac
+}}
+
+
+cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
+
+
+cmd extract ${{
+  case "$f" in
+      *.zip)      unzip "$f" ;;
+      *.tar.gz)   tar -xzvf "$f" ;;
+      *.tar.bz2)  tar -xjvf "$f" ;;
+      *.tar)      tar -xvf "$f" ;;
+      *.bz2)       bunzip2 "$f" ;;
+      *.rar)       unrar x "$f" ;;
+      *.gz)        gunzip "$f" ;;
+      *.tbz2)      tar xjf "$f" ;;
+      *.tgz)       tar xzf "$f" ;;
+      *.Z)         uncompress "$f" ;;
+      *.7z)        7z x "$f" ;;
+      *.deb)       ar x "$f" ;;
+      *.tar.xz)    tar xf "$f" ;;
+      *.tar.zst)   tar xf "$f" ;;
+      *) echo "Unsupported format" ;;
+  esac
+}}
+
+cmd zip %zip -r "$f" "$f"
+cmd tar %tar cvf "$f.tar" "$f"
+cmd targz %tar cvzf "$f.tar.gz" "$f"
+cmd tarbz2 %tar cjvf "$f.tar.bz2" "$f"
+
+
+#cmd delete ${{
+#	clear; tput cup $(($(tput lines)/3)); tput bold
+#	set -f
+#	printf "%s\n\t" "$fx" "delete? [y/n]" | cowsay -W 55
+#	read ans
+#	[ $ans = "y" ] && rm -rf -- $fx
+#}}
+
+cmd delete ${{
+  clear; tput cup $(($(tput lines)/3)); tput bold
+  ~/.config/lf/lf-cowsay $fx
+}}
+
+
+cmd bulkrename ${{
+    tmpfile_old="$(mktemp)"
+    tmpfile_new="$(mktemp)"
+
+    [ -n "$fs" ] && fs=$(basename -a $fs) || fs=$(ls)
+
+    echo "$fs" > "$tmpfile_old"
+    echo "$fs" > "$tmpfile_new"
+    $EDITOR "$tmpfile_new"
+
+    [ "$(wc -l < "$tmpfile_old")" -eq "$(wc -l < "$tmpfile_new")" ] || { rm -f "$tmpfile_old" "$tmpfile_new"; exit 1; }
+
+    paste "$tmpfile_old" "$tmpfile_new" | while IFS="$(printf '\t')" read -r src dst
+    do
+        [ "$src" = "$dst" ] || [ -e "$dst" ] || mv -- "$src" "$dst"
+    done
+
+    rm -f "$tmpfile_old" "$tmpfile_new"
+    lf -remote "send $id unselect"
+}}
+
+
+cmd lfrc ${{
+    $EDITOR ~/.config/lf/lfrc
+    lf -remote "send $id source ~/.config/lf/lfrc"
+}}
+
+
+cmd path $printf "%s" "$fx" | xclip -selection clipboard
+
+cmd dragon %ripdrag -a -x $fx
+
+cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
+
+cmd fzf-ripgrep-search ${{
+    RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+    res="$(
+        FZF_DEFAULT_COMMAND="$RG_PREFIX ''" \
+            fzf --bind "change:reload:$RG_PREFIX {q} || true" \
+            --ansi --layout=reverse --header 'Search in files' \
+            | cut -d':' -f1 | sed 's/\\/\\\\/g;s/"/\\"/g'
+    )"
+    [ -n "$res" ] && lf -remote "send $id select \"$res\""
+}}
+
+cmd to-mp3 ${{
+    set -f
+    outname=$(echo "$f" | cut -f 1 -d '.')
+    lame -V --preset standard $f "${outname}.mp3"
+}}
+
+cmd setwallpaper %cp "$f" ~/.config/wall.png && feh --no-fehbg --bg-scale ~/.config/wall.png
+
+
+cmd fzf-jump ${{
+  res="$(find . -maxdepth 8 | fzf --reverse --header='Jump to location')"
+  if [ -f "$res" ]; then
+    cmd="select"
+  elif [ -d "$res" ]; then
+    cmd="cd"
+  fi
+  lf -remote "send $id $cmd \"$res\""
+}}
+
+## open at the directory where you clsoed
+#mark-load; push '
+#
+#cmd on-quit ${{
+#    marks=~/.local/share/lf/marks
+#    sed -i "/^'/d" "$marks"
+#    echo "':$PWD" >> "$marks"
+#}}
+
+cmd mv-to-new-dir ${{
+	set -f
+	read newd
+	printf "Directory name: "
+	mkdir -- "$newd"
+	mv -- $fx "$newd"
+}}
+
+cmd yank-file ${{
+mime_type=$(file -b --mime-type $f)
+
+case ${mime_type%%/*} in
+  image) xclip -sel c -t image/png < $f ;;
+  *) xclip -sel c < $f ;;
+esac
+}}
+
+cmd quitcd ${{
+	echo "1" > "$LF_CD_TEMPDIR/changecwd"
+	lf -remote "send $id quit"
+}}
+
+
+###########
+# keymaps #
+###########
+
+
+
+# dirs #
+map gh cd /home/kyle
+map ~  cd /home/kyle
+map gc cd /home/kyle/.config
+map gs cd /home/kyle/.local/bin
+map gl cd /home/kyle/lit
+map gd cd /home/kyle/doc
+map ge cd /home/kyle/doc/edu/ell
+map gD cd /home/kyle/dls
+map gi cd /home/kyle/img
+map go cd /home/kyle/img/old
+map gw cd /home/kyle/img/wal
+map gv cd /home/kyle/vid
+map gm cd /home/kyle/mus
+map gr cd /
+
+map mvs %mv $fx /home/kyle/.local/bin
+map mvh %mv $fx /home/kyle
+map mvc %mv $fx /home/kyle/.config
+map mvs %mv $fx /home/kyle/.local/bin
+map mvl %mv $fx /home/kyle/lit
+map mvd %mv $fx /home/kyle/doc
+map mve %mv $fx /home/kyle/doc/edu/ell
+map mvD %mv $fx /home/kyle/dls
+map mvi %mv $fx /home/kyle/img
+map mvo %mv $fx /home/kyle/img/old
+map mvw %mv $fx /home/kyle/img/wal
+map mvv %mv $fx /home/kyle/vid
+map mvm %mv $fx /home/kyle/mus
+map mvr %mv $fx /
+
+# unmap #
+map "$"
+map "%"
+map "&"
+map "'"
+map '"'
+map ,
+map ;
+map <c-b>
+map <c-f>
+map <c-n>
+map <c-p>
+map ?
+map F
+map I
+map f
+map i
+map m
+map t
+map q
+map v
+map w
+
+map . :read; cmd-history-prev; cmd-enter
+map B :bulkrename
+map D :delete
+map V push :!nvim<space>
+map F :fzf-ripgrep-search
+map I invert
+map R :dragon
+map q :quitcd
+map W :setwallpaper
+map Y :yank-file
+map f :fzf-jump
+map o push :mkdir<space>
+map x :chmodx;down
+
+map sr :set reverse!
+
+map <c-o> !clear&&$f
+map <a-n> :mv-to-new-dir
+map <c-s> :calcdirsize
+map <c-x> :unarchive
+map <esc> :{{unselect; clear;}}
+
+map <enter> open
+map <delete> :delete

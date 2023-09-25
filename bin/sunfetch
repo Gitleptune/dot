@@ -1,0 +1,50 @@
+#!/bin/sh
+# suckless and useless fetch
+# uptime breaks after 1 day, arch breaks constantly anyway amirite
+
+os="endeavour"
+wm="bspwm"
+pm="$(pacman -Qq | wc -l)"
+tm="st"
+br="vivaldi"
+up="$(uptime | awk '{print $3}' | tr ',' ' ')"
+mm=$(free -m | sed -n 's/^Mem:\s\+[0-9]\+\s\+\([0-9]\+\)\s.\+/\1/p')
+mm_total=$(free -m | awk '/^Mem:/ {print $2}')
+
+c0='[0m'
+c1='[31m'
+c2='[34m'
+c3='[33m'
+c4='[32m'
+c5='[36m'
+c6='[35m'
+c7=$(tput setaf 3)
+
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+cat <<-EOF
+• ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+
+   ${bold}${c1}os${normal}  ✦  ${os}
+   ${bold}${c2}wm${normal}  ✦  ${wm}
+   ${bold}${c3}pm${normal}  ✦  ${pm} (bloat)
+   ${bold}${c4}br${normal}  ✦  ${br}
+   ${bold}${c5}up${normal}  ✦  ${up}
+   ${bold}${c6}tm${normal}  ✦  ${tm}
+   ${bold}${c7}mm${normal}  ✦  ${mm}/${mm_total} MiB
+
+• ~ ~ ~ ~ ~ ~ ~ 🌻🌻🌻🌻🌻
+${c0}
+EOF
+
+#cat <<-EOF
+#• ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+#
+#   ${bold}${c1}pm${normal}  ✦  ${pm} (bloat)
+#   ${bold}${c2}up${normal}  ✦  ${up}
+#   ${bold}${c3}mm${normal}  ✦  ${mm}/${mm_total} MiB
+#
+#• ~ ~ ~ ~ ~ ~ ~ 🌻🌻🌻🌻🌻
+#${c0}
+#EOF

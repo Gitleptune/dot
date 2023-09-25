@@ -1,0 +1,23 @@
+set statusbar-h-padding 0
+set statusbar-v-padding 0
+set page-padding 0
+set selection-clipboard clipboard
+# keybindings
+map i recolor
+map D toggle_page_mode
+map r reload
+map R rotate
+map Q quit
+
+# colors
+set default-bg '#261b17'
+set default-fg '#e4cbb3'
+set inputbar-bg '#1b110e'
+set inputbar-fg '#e4cbb3'
+set statusbar-bg '#1b110e'
+set statusbar-fg '#e4cbb3'
+set recolor-darkcolor '#e4ccb3'
+set recolor-lightcolor '#1b110e'
+set highlight-color '#f99666'
+set highlight-active-color '#f99666'
+set highlight-transparency 0.3

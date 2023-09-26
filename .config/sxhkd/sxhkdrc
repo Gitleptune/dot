@@ -8,7 +8,7 @@ super + Return
 	st
 
 super + r
-	firefox
+	~/.local/bin/firefox
 
 super + w
 	vivaldi-stable

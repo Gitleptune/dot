@@ -196,12 +196,31 @@ CLEANUP void tns_free(tns_t *tns)
 static Imlib_Image tns_scale_down(Imlib_Image im, int dim)
 {
   int w, h;
+  /*/ DEFAULT
+  float z, zw, zh;
+  // END DEFAULT */
 
   imlib_context_set_image(im);
   w = imlib_image_get_width();
   h = imlib_image_get_height();
 
-  // SQUARE THUMBNAILS //
+  /*/ DEFAULT
+  zw = (float)dim / (float)w;
+  zh = (float)dim / (float)h;
+  z = MIN(zw, zh);
+  z = MIN(z, 1.0);
+ 
+  if (z < 1.0) {
+  	imlib_context_set_anti_alias(1);
+  	im = imlib_create_cropped_scaled_image(0, 0, w, h,
+  	                                       MAX(z * w, 1), MAX(z * h, 1));
+  	if (im == NULL)
+  		error(EXIT_FAILURE, ENOMEM, NULL);
+  	imlib_free_image_and_decache();
+    // END DEFAULT CODE */
+  
+
+  /* SQUARE THUMBNAILS by carebears //
   int x = (w < h) ? 0 : (w - h) / 2;
   int y = (w > h) ? 0 : (h - w) / 2;
 
@@ -213,7 +232,36 @@ static Imlib_Image tns_scale_down(Imlib_Image im, int dim)
     if (im == NULL) {
       imlib_free_image_and_decache();h = imlib_image_get_height();
     }
-  // SQUARE THUMBNAILS END //
+  // SQUARE THUMBNAILS END */
+  
+  // REAL AND TRUE TOGGLEABLE SQUARE THUMBNAILS PATCH
+  if (SQUARE_THUMBS == false) { /* normal thumbs */
+    float z, zw, zh;
+    zw = (float) dim / (float) w;
+    zh = (float) dim / (float) h;
+    z = MIN(zw, zh);
+    z = MIN(z, 1.0);
+
+    if (z < 1.0) {
+      imlib_context_set_anti_alias(1);
+      im = imlib_create_cropped_scaled_image(0, 0, w, h,
+                                             MAX(z * w, 1), MAX(z * h, 1));
+      if (im == NULL)
+        error(EXIT_FAILURE, ENOMEM, NULL);
+      imlib_free_image_and_decache();
+    }
+  } else { /* generate square thumbs */
+    int x = (w < h) ? 0 : (w - h) / 2;
+    int y = (w > h) ? 0 : (h - w) / 2;
+    int s = (w < h) ? w : h;
+    if (dim < w || dim < h) {
+      imlib_context_set_anti_alias(1);
+      im = imlib_create_cropped_scaled_image(x, y, s, s, dim, dim);
+      if (im == NULL)
+        error(EXIT_FAILURE, ENOMEM, NULL);
+      imlib_free_image_and_decache();
+    }
+    // END TOGGLEABLE SQUARE THUMBNAILS PATCH */
   }
 
   return im;
@@ -592,3 +640,12 @@ int tns_translate(tns_t *tns, int x, int y)
 
 	return n;
 }
+
+// SQUARE THUMB PATCH
+bool tns_toggle_squared(void)
+{
+	SQUARE_THUMBS = !SQUARE_THUMBS;
+	return true;
+}
+
+// END SQUARE THUMB PATCH */

@@ -34,6 +34,8 @@ alias bsrc='nvim ~/.config/bspwm/bspwmrc'
 alias brc='nvim ~/.bashrc'
 alias sxrc='nvim ~/.config/sxhkd/sxhkdrc'
 alias lfrc='nvim ~/.config/lf/lfrc'
+alias nsrc='cd ~/.config/suck/nsxiv && sudo make clean install'
+alias strc='cd ~/.config/suck/st && sudo make clean install'
 
 alias lf='lfcd'
 
@@ -73,9 +75,6 @@ alias nsxivrand="find . -type f | shuf | nsxiv -ai -S 2.5"
 alias nsexiv='nsxiv -a'
 alias nsxiv='nsxiv -a'
 alias sxiv='nsxiv -a'
-alias nsrc='cd ~/.config/suck/nsxiv && sudo make clean install'
-
-alias strc='cd ~/.config/suck/st && sudo make clean install'
 
 alias cp='cp -i'
 
@@ -101,6 +100,8 @@ export XDG_DATA_HOME=${XDG_DATA_HOME:="$HOME/.local/share"}
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:="$HOME/.cache"}
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:="$HOME/.config"}
 export XDG_STATE_HOME=${XDG_STATE_HOME:="$HOME/.local/state"}
+
+export PATH="$(du "${HOME:="/home/$USER"}/.local/bin" | cut -f2 | tr "\n" ":"):$PATH"
 
 export BROWSER="vivaldi-stable"
 export EDITOR="nvim"

@@ -22,6 +22,13 @@ static const bool TOP_STATUSBAR = false;
 #endif
 #ifdef INCLUDE_IMAGE_CONFIG
 
+// DMENU PATCH
+char nsxiv_xid[64]; /* will be set to nsxiv's xid when dmenu_search is invoked */
+const char *const dmenu_cmd[] = {
+	"dmenu", "-l", "10", "-w", nsxiv_xid, NULL
+};
+// END DMENU PATCH
+
 /* levels (in percent) to use when zooming via '-' and '+':
  * (first/last value is used as min/max zoom level)
  */
@@ -83,6 +90,14 @@ static const int thumb_sizes[] = { 110, 125, 150, 175, 200, 205, 250, 300, 350, 
 /* thumbnail size at startup, index into thumb_sizes[]: */
 static const int THUMB_SIZE = 5;
 
+
+// SQUARE THUMBNAILS PATCH
+// in thumbnail mode toggle with s
+static bool SQUARE_THUMBS = true;
+
+// END SQUARE THUMBNAILS PATCH */
+
+
 #endif
 #ifdef INCLUDE_MAPPINGS_CONFIG
 
@@ -105,6 +120,7 @@ static const keymap_t keys[] = {
 	{ 0,            XK_G,             g_n_or_last,          None },
 	{ 0,            XK_r,             g_reload_image,       None },
 	{ 0,            XK_D,             g_remove_image,       None },
+  { 0,            XK_slash,         g_dmenu_search,       None },
 	{ ControlMask,  XK_h,             g_scroll_screen,      DIR_LEFT },
 	{ ControlMask,  XK_Left,          g_scroll_screen,      DIR_LEFT },
 	{ ControlMask,  XK_j,             g_scroll_screen,      DIR_DOWN },
@@ -140,6 +156,7 @@ static const keymap_t keys[] = {
 	{ 0,            XK_l,             t_move_sel,           DIR_RIGHT },
 	{ 0,            XK_Right,         t_move_sel,           DIR_RIGHT },
 	{ 0,            XK_R,             t_reload_all,         None },
+  { 0,            XK_s,             t_toggle_squared,     None }, // THUMB PATCH
 
 	{ 0,            XK_n,             i_navigate,           +1 },
 	{ 0,            XK_n,             i_scroll_to_edge,     DIR_LEFT | DIR_UP },

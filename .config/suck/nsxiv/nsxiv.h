@@ -325,6 +325,9 @@ bool tns_move_selection(tns_t*, direction_t, int);
 bool tns_scroll(tns_t*, direction_t, bool);
 bool tns_zoom(tns_t*, int);
 int tns_translate(tns_t*, int, int);
+// SQUARE THUMB PATCH
+bool tns_toggle_squared(void);
+// END SQUARE THUMB PATCH */
 
 
 /* util.c */

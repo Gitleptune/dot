@@ -584,7 +584,7 @@ bool tns_move_selection(tns_t *tns, direction_t dir, int cnt)
 
 bool tns_scroll(tns_t *tns, direction_t dir, bool screen)
 {
-	int d, max, old;
+  int d, max, old;
 
 	old = tns->first;
 	d = tns->cols * (screen ? tns->rows : 1);

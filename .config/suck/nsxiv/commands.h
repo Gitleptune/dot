@@ -6,6 +6,7 @@
 bool cg_change_gamma(arg_t);
 bool cg_change_brightness(arg_t);
 bool cg_change_contrast(arg_t);
+bool cg_toggle_invert(arg_t); // INVERT PATCH
 bool cg_first(arg_t);
 bool cg_mark_range(arg_t);
 bool cg_n_or_last(arg_t);
@@ -23,9 +24,7 @@ bool cg_toggle_fullscreen(arg_t);
 bool cg_toggle_image_mark(arg_t);
 bool cg_unmark_all(arg_t);
 bool cg_zoom(arg_t);
-// DMENU PATCH
-bool cg_dmenu_search(arg_t);
-// DMENU PATCH END
+bool cg_dmenu_search(arg_t); // DMENU PATCH
 /* image mode */
 bool ci_alternate(arg_t);
 bool ci_cursor_navigate(arg_t);
@@ -49,15 +48,14 @@ bool ct_reload_all(arg_t);
 bool ct_scroll(arg_t);
 bool ct_drag_mark_image(arg_t);
 bool ct_select(arg_t);
-// SQUARE THUMBS PATCH
-bool ct_toggle_squared(arg_t);
-// END SQUARE THUMBS PATCH */
+bool ct_toggle_squared(arg_t); // SQUARE THUMBS PATCH
 
 #ifdef INCLUDE_MAPPINGS_CONFIG
 /* global */
 #define g_change_gamma { cg_change_gamma, MODE_ALL }
 #define g_change_brightness { cg_change_brightness, MODE_ALL }
 #define g_change_contrast { cg_change_contrast, MODE_ALL }
+#define g_toggle_invert { cg_toggle_invert, MODE_ALL } // INVERT PATCH
 #define g_first { cg_first, MODE_ALL }
 #define g_mark_range { cg_mark_range, MODE_ALL }
 #define g_n_or_last { cg_n_or_last, MODE_ALL }

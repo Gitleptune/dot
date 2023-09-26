@@ -97,6 +97,7 @@ void img_init(img_t *img, win_t *win)
 	imlib_context_set_color_modifier(img->cmod);
 	img->brightness = 0;
 	img->contrast = 0;
+  img->invert = false; // INVERT PATCH
 	img_change_color_modifier(img, options->gamma, &img->gamma);
 
 	img->ss.on = options->slideshow > 0;
@@ -1019,6 +1020,21 @@ void img_update_color_modifiers(img_t *img)
 		imlib_modify_color_modifier_brightness(steps_to_range(img->brightness, BRIGHTNESS_MAX, 0.0));
 	if (img->contrast != 0)
 		imlib_modify_color_modifier_contrast(steps_to_range(img->contrast, CONTRAST_MAX, 1.0));
+
+  // BEGIN INVERT PATCH
+  if (img->invert) {
+    size_t i;
+    uint8_t r[256], g[256], b[256], a[256];
+
+    imlib_get_color_modifier_tables(r, g, b, a);
+    for (i = 0; i < ARRLEN(r); i++) {
+      r[i] = 255 - r[i];
+      g[i] = 255 - g[i];
+      b[i] = 255 - b[i];
+    }
+    imlib_set_color_modifier_tables(r, g, b, a);
+  }
+  // END INVERT PATCH */
 
 	img->dirty = true;
 }

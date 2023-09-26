@@ -253,6 +253,18 @@ bool cg_change_contrast(arg_t d)
 	return change_color_modifier(d, &img.contrast);
 }
 
+// BEGIN INVERT PATCH
+bool cg_toggle_invert(arg_t _)
+{
+  img.invert = !img.invert;
+  img_update_color_modifiers(&img);
+  if (mode == MODE_THUMB)
+    tns.dirty = true;
+  return true;
+}
+// END INVERT PATCH */
+
+
 // PATCH FOR DMENU! !!11 
 bool cg_dmenu_search(arg_t _)
 {

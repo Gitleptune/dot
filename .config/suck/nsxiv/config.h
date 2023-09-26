@@ -90,13 +90,11 @@ static const int thumb_sizes[] = { 110, 125, 150, 175, 200, 205, 250, 300, 350, 
 /* thumbnail size at startup, index into thumb_sizes[]: */
 static const int THUMB_SIZE = 5;
 
-
 // SQUARE THUMBNAILS PATCH
 // in thumbnail mode toggle with s
 static bool SQUARE_THUMBS = true;
 
 // END SQUARE THUMBNAILS PATCH */
-
 
 #endif
 #ifdef INCLUDE_MAPPINGS_CONFIG
@@ -146,6 +144,7 @@ static const keymap_t keys[] = {
 	{ ControlMask,  XK_bracketleft,   g_change_brightness,  -1 },
 	{ 0,            XK_parenleft,     g_change_contrast,    -1 },
 	{ 0,            XK_parenright,    g_change_contrast,    +1 },
+  { 0,            XK_i,             g_toggle_invert,      None }, // INVERT PATCH
 
 	{ 0,            XK_h,             t_move_sel,           DIR_LEFT },
 	{ 0,            XK_Left,          t_move_sel,           DIR_LEFT },

@@ -152,7 +152,7 @@ cmd dragon %ripdrag -a -x $fx
 cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
 
 cmd fzf-ripgrep-search ${{
-    RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+    RG_PREFIX="rg --follow --column --line-number --no-heading --color=always --smart-case "
     res="$(
         FZF_DEFAULT_COMMAND="$RG_PREFIX ''" \
             fzf --bind "change:reload:$RG_PREFIX {q} || true" \

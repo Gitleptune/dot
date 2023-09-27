@@ -35,10 +35,6 @@ set statfmt          "\033[01m%p\033[0m"
 # commands #
 ############
 
-cmd piko %{{
-  piko $f
-}}
-
 cmd chmodx %{{
   if [ -x $f ];
     then chmod -x "$f"
@@ -75,7 +71,6 @@ cmd open ${{
 
 
 cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
-
 
 cmd extract ${{
   case "$f" in
@@ -150,6 +145,8 @@ cmd path $printf "%s" "$fx" | xclip -selection clipboard
 cmd dragon %ripdrag -a -x $fx
 
 cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
+
+cmd piko %piko $f
 
 cmd fzf-ripgrep-search ${{
     RG_PREFIX="rg --follow --column --line-number --no-heading --color=always --smart-case "

@@ -42,6 +42,10 @@ vim.o.mouse = 'a'
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+
+--" Compile document, be it groff/LaTeX/markdown/etc.
+--vim.keymap.set(<leader>c :w! \| !compiler "%:p"<CR>)
+
 -- i hate wrapping
 vim.keymap.set({'n', 'v'}, 'j', 'gj')
 vim.keymap.set({'n', 'v'}, 'k', 'gk')

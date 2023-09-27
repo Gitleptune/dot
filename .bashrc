@@ -24,6 +24,8 @@ bind 'TAB:menu-complete'
 
 alias hw='clear && javac hw.java && clear && java hw'
 
+alias vore='devour'
+
 alias vim='nvim'
 alias neovim='nvim'
 

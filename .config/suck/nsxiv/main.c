@@ -461,7 +461,7 @@ static void update_info(void)
       char* icon ="🌻 ";
       int icon_len = strlen(icon);
 
-      strncpy(l->buf, icon, icon_len);
+      memcpy(l->buf, icon, icon_len);
       strncpy(l->buf + icon_len, files[fileidx].name, l->size - icon_len - 1);
       l->buf[l->size - 1] = '\0';
     }
@@ -490,8 +490,8 @@ static void update_info(void)
       char* icon ="🌻 ";
       int icon_len = strlen(icon);
 
-      strncpy(l->buf, icon, icon_len);
-      strncpy(l->buf + icon_len, files[fileidx].name, l->size - icon_len - 1);
+      memcpy(l->buf, icon, icon_len);
+      memcpy(l->buf + icon_len, files[fileidx].name, l->size - icon_len - 1);
       l->buf[l->size - 1] = '\0';
     }
 	}

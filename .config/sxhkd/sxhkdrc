@@ -22,7 +22,7 @@ alt + s
   nsxiv -baiof ~/doc/edu/schedule.png
 
 alt + e
-	$HOME/.local/bin/dmenu/dmenu-emoji
+	dmenu-emoji
 
 super + d
   dmenu_run
@@ -37,10 +37,10 @@ Print
   scrot $HOME/img/scr/all/screenshot-$(date +%F_%T).png -e 'xclip -selection c -t image/png < $f'
 
 alt + a
-  $HOME/.local/bin/dmenu/dmenu-menus
+  dmenu-menus
 
 alt + c
-  $HOME/.local/bin/dmenu/dmenu-calc
+  dmenu-calc
 
 # BSPWM HOTKEYS #
 

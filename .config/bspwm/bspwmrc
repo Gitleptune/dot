@@ -2,8 +2,8 @@
 \lf -server &
 
 rm /home/kyle/.xsession-errors &
-rm /home/kyle/.fehbg &
 rm /home/kyle/.mozilla &
+rm /home/kyle/screen-recording.mp4 &
 
 bspc monitor -d 1 2 3 4 5 6 7 8 9 10
 
@@ -37,7 +37,7 @@ bspc rule -a firefox desktop='^3' follow=on
 
 pidof picom -b --config $HOME/.config/picom/picom.conf || picom -b --config $HOME/.config/picom/picom.conf &
 pidof dunst || /usr/bin/dunst &
-feh --bg-scale --no-fehbg ~/.config/wall.png &
+xwallpaper --zoom ~/.config/wall.png &
 nm-applet --indicator &
 xsetroot -cursor_name left_ptr &
 unclutter --timeout 1 &

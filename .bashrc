@@ -52,6 +52,10 @@ alias bc='bc-ql'
 alias ffmpeg='ffmpeg -hide_banner'
 alias diff='diff --color=auto'
 alias g='git'
+alias free='free -h'
+alias df='df -h'
+alias dir='dir --color'
+alias vdir='vdir --color'
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -69,8 +73,6 @@ alias wifi="ping gnu.org"
 
 # following xdg standards would be communism
 alias wget="wget --hsts-file='$XDG_CACHE_HOME/wget-hsts'"
-
-alias cpimg='xclip -selection clipboard -t image/png -i'
 
 alias ls='ls --color -hN --group-directories-first'
 alias la='ls --color -hNA --group-directories-first'

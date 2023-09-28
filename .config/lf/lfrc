@@ -146,7 +146,11 @@ cmd dragon %ripdrag -a -x $fx
 
 cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
 
+cmd qr $curl -F"file=@$fx" https://0x0.st | qrencode -t "png" -o /tmp/qrsend.png | devour nsxiv --anti-alias=no -bqpz 400 /tmp/qrsend.png
+
 cmd piko %piko $f
+
+cmd nsxiv-preview !nsxiv-preview $f
 
 cmd fzf-ripgrep-search ${{
     RG_PREFIX="rg --follow --column --line-number --no-heading --color=always --smart-case "
@@ -232,7 +236,7 @@ map gv cd /home/kyle/vid
 map gm cd /home/kyle/mus
 map gr cd /
 
-map mvs %mv $fx /home/kyle/.local/bin
+map mvs %mv $fx /home/kyle/.local/bin/idk
 map mvh %mv $fx /home/kyle
 map mvc %mv $fx /home/kyle/.config
 map mvs %mv $fx /home/kyle/.local/bin

@@ -169,7 +169,7 @@ cmd to-mp3 ${{
     lame -V --preset standard $f "${outname}.mp3"
 }}
 
-cmd setwallpaper %cp "$f" ~/.config/wall.png && feh --no-fehbg --bg-scale ~/.config/wall.png
+cmd setwallpaper %cp "$f" ~/.config/wall.png && xwallpaper --zoom ~/.config/wall.png
 
 
 cmd fzf-jump ${{
@@ -181,15 +181,6 @@ cmd fzf-jump ${{
   fi
   lf -remote "send $id $cmd \"$res\""
 }}
-
-## open at the directory where you clsoed
-#mark-load; push '
-#
-#cmd on-quit ${{
-#    marks=~/.local/share/lf/marks
-#    sed -i "/^'/d" "$marks"
-#    echo "':$PWD" >> "$marks"
-#}}
 
 cmd mv-to-new-dir ${{
 	set -f

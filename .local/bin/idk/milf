@@ -12,24 +12,22 @@
 
 
 
-                           999
-                       999 999 999
-                        9999  9999 999
-                     999 99 999 99999
-                   999  999 999  99999
-                    2 hi 2 > /dev/null 99
-                    1 "z" "r rrr " 12 12
-                         "llr" "r" 11  1
-                          "lr"
-                  ~mako    "lr"
-                           "nnn"  #h--h#
-                          "11720" ignore errors
-                        EXTRACT="7z x"
-                      BROWSER="firefox --alsa"
-                   TERM="alacritty -e"
-                 IMAGE="nsxiv -s F -z 25 -t -a"
+                         999
+                     999 999 999
+                      9999  9999 999
+                   999 99 999 99999
+                 999  999 999  99999
+                  2 hi 2 > /dev/null 99
+                  1 "z" "r rrr " 12 12
+                       "llr" "r" 11  1
+                        "lr"
+                ~mako    "lr"
+                         "nnn"  #h--h#
+                        "11720" ignore errors
+                      BROWSER="vivaldi-stable"
+                   TERM="st"
+                 IMAGE=nsxiv-np
                 VIDEO=mpv
-                MUSIC="foot pretzel" # (img2sixel)
 
     if [ ! -f "$1" ];then
             exit
@@ -60,12 +58,10 @@
                 ${VIDEO} "$1"
         elif [ "${1#*.}" = "mkv" ];then
                 ${VIDEO} "$1"
-        elif [ "${1#*.}" = "opus" ];then
-                ${TERM} ${MUSIC} "$1"
         elif [ "${1#*.}" = "mp3" ];then
-                ${TERM} ${MUSIC} "$1"
+                ${TERM} ${VIDEO} "$1"
         elif [ "${1#*.}" = "flv" ];then
-                ${TERM} ${MUSIC} "$1"
+                ${TERM} ${VIDEO} "$1"
         else
              ${TERM} vim "$1"
     fi

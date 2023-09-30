@@ -139,19 +139,6 @@ cmd lfrc ${{
     lf -remote "send $id source ~/.config/lf/lfrc"
 }}
 
-
-cmd path $printf "%s" "$fx" | xclip -selection clipboard
-
-cmd dragon %ripdrag -a -x $fx
-
-cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
-
-cmd qr $curl -F"file=@$fx" https://0x0.st | qrencode -t "png" -o /tmp/qrsend.png | devour nsxiv --anti-alias=no -bqpz 400 /tmp/qrsend.png
-
-cmd piko %piko $f
-
-cmd nsxiv-preview !nsxiv-preview $f
-
 cmd fzf-ripgrep-search ${{
     RG_PREFIX="rg --follow --column --line-number --no-heading --color=always --smart-case "
     res="$(
@@ -203,6 +190,20 @@ cmd quitcd ${{
 	echo "1" > "$LF_CD_TEMPDIR/changecwd"
 	lf -remote "send $id quit"
 }}
+
+cmd path $printf "%s" "$fx" | xclip -selection clipboard
+
+cmd dragon %ripdrag -a -x $fx
+
+cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
+
+cmd qr $curl -F"file=@$fx" https://0x0.st | qrencode -t "png" -o /tmp/qrsend.png | devour nsxiv --anti-alias=no -bqpz 400 /tmp/qrsend.png
+
+cmd piko %piko $f
+
+cmd nsxiv-preview !nsxiv-preview $f
+
+cmd crop !cropgui $f
 
 
 ###########
@@ -264,7 +265,9 @@ map t
 map q
 map v
 map w
+map c
 
+map c :crop
 map . :read; cmd-history-prev; cmd-enter
 map B :bulkrename
 map D :delete

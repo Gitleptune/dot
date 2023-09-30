@@ -34,7 +34,7 @@ super + shift + s
   maim -m 5 -s | xclip -selection clipboard -t image/png
 
 Print
-  scrot $HOME/img/scr/all/screenshot-$(date +%F_%T).png -e 'xclip -selection c -t image/png < $f'
+  scrot $HOME/img/scr/all/screenshot-$(date +%F%T).png -e 'xclip -selection c -t image/png < $f'
 
 alt + a
   dmenu-menus

@@ -1,26 +1,24 @@
 #!/bin/sh
+### function ###
+# simple screen recorder that pops out the file with ripdrag
+# to drag and drop it into a gui application
+### usage ###
+# just `rec` and then q/<c-c> to quit
+### dependencies ###
+# ffmpeg
+# ripdrag
 
-#output=$HOME/img/scr/all/"$(date +%s_%h%d_%H:%M:%S)"
-
-# -f alsa -ac 2 -i hw:0 \
 ffmpeg \
-    -video_size 1680x1050 \
-    -framerate 60 \
-    -f x11grab \
-    -i :0.0 \
-    -c:v libx264 \
-    -crf 0 \
-    -preset ultrafast \
-    -y \
-    output.mkv
+  -video_size 1680x1050 \
+  -framerate 60 \
+  -f x11grab \
+  -i :0.0 \
+  -c:v libx264 \
+  -crf 1 \
+  -preset ultrafast \
+  -pix_fmt yuv420p \
+  -profile baseline \
+  -y \
+  ~/screen-recording.mp4
 
-# ffmpeg \
-#     -y \
-#     -vaapi_device /dev/dri/renderD128 \
-#     -f x11grab \
-#     -video_size 1920x1080 \
-#     -i :0 \
-#     -vf 'hwupload,scale_vaapi=format=nv12' \
-#     -c:v h264_vaapi \
-#     -qp 24  \
-#     output.mp4
+ripdrag -x ~/screen-recording.mp4

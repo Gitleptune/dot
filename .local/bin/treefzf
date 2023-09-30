@@ -1,0 +1,66 @@
+#!/bin/bash
+# run tree, select a file or directory using fzf, then print it's path.
+
+# config
+maxdepth=2
+
+main()
+{
+    [[ -n $1 ]] && { cd "$1" || exit 1 ;}
+    local path
+    while sel=$(sel); do
+        [[ -e $sel ]] && path="${path%/}${path:+/}$sel"
+        if [[ -d $sel ]]; then
+            cd "$sel"
+        elif [[ -f $sel ]]; then
+            break
+        fi
+    done
+    printf '%s\n' "$path"
+}
+
+sel()
+{
+    local tree sel num depth line
+    tree=$(echo ../; tree -atlFCL "$maxdepth" --dirsfirst -I '.dbus|Trash|.Trash-*|dosdevices|mesa_shader_cache|go-build|$RECYCLE.BIN|System Volume Information')
+    sel=$(printf '%s\n' "$tree" | cat -n | fzf --header="$PWD" --ansi --height=100% --with-nth=2.. -d'\t') || return 1
+    num=$(set -- $sel; echo $1)
+    tree=$(printf '%s\n' "$tree" | head -$num | tac | sed 's/\x1b\[[0-9;]*m//g')
+    sel=${sel#*$'\t'}
+    depth=$(getdepth "$sel")
+    if [[ $depth -eq 0 ]]; then
+        printf '%s\n' "$sel"
+        return
+    fi
+    while [[ $depth -gt 0 ]]; do
+        line=$(printf '%s\n' "$tree" | grep -Em1 "^.{$((depth*4-2))}─ ") || continue
+        sanitize "$line"
+        ((depth--))
+    done | tac | tr '\n' '/' | rev | cut -c2- | rev
+}
+
+printresult()
+{
+    shopt -s extdebug
+    f()(printf '%s/' "${BASH_ARGV[@]}"); f "$@"
+    shopt -u extdebug
+}
+
+getdepth()
+{
+    local s=${1%%─ *}
+    [[ $s = "$1" ]] && echo 0 && return
+    echo $(( (${#s}-2)/4+1 ))
+}
+
+sanitize()
+{
+    local s=$1
+    case $s in
+        */|*=|*'*'|*'>'|*'|') s=${s::-1} ;;
+    esac
+    s=${s% -> *}
+    echo "${s#*─ }"
+}
+
+main "$@"

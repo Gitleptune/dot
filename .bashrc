@@ -23,6 +23,7 @@ bind 'TAB:menu-complete'
 #####################################
 
 alias hw='clear && javac hw.java && clear && java hw'
+alias deba='echo && cat ~/etc/deba && echo'
 
 alias vore='devour'
 

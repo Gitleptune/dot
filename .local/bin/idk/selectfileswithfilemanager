@@ -1,0 +1,36 @@
+#!/bin/sh
+# read filenames from stdin/args and select them in lf.
+
+# set the shell field separator to newline
+IFS=$'\n'
+
+# if no argument is given, read paths from stdin
+[[ $# -eq 0 ]] && set -- $(</dev/stdin)
+
+# escape doublequotes
+set -- "${@//\"/\\\"}"
+
+# function to send commands to lf
+send() { lf -remote "send ${id:?} $*" ;}
+
+# if any part of the given path is hidden (starts with a dot),
+# set the hidden option in lf to show hidden files too
+for path; do
+    case $path in
+        .*|*/.*) send 'set hidden'; break ;;
+    esac
+done
+
+# select the files in lf
+case $# in
+    0) exit 1 ;;
+    1) send "select \"$1\"" ;;
+    *)
+        # if lf's preview is on, turn it off before selecting
+        # the files, and turn it back on afterwards.
+        p=$lf_preview
+        [[ $p = true ]] && send 'set nopreview'
+        for f; do send "select \"$f\""; send toggle; done
+        [[ $p = true ]] && send 'set preview'
+    ;;
+esac

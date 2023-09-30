@@ -1,0 +1,14 @@
+#!/bin/sh
+
+preview_file="${TMPDIR:-/tmp}/nsxiv_preview_$$"
+trap 'rm -f $preview_file' EXIT
+printf "P1\n1 1\n1\n" > "$preview_file"
+
+NSXIV_PREVIEW="$preview_file" devour nsxiv -aot "$@" &
+tns_pid=$!
+
+nsxiv -pb "$preview_file" &
+preview_pid=$!
+
+wait "$tns_pid"
+kill "$preview_pid"

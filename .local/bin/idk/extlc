@@ -1,0 +1,27 @@
+#!/bin/bash
+# recursively convert extensions of files in a directory to lowercase letters.
+
+dir=${1:-$PWD}
+
+readarray -t files <<< "$(
+    find "$dir" -type f \
+        -not -path '*/.*' -not -name '*.sync-conflict-*' \
+        -regextype egrep -regex '^/?(.+/)[^/]+\.[^/\.]*[A-Z]+[^/\.]*$'
+)"
+
+if [[ ${#files[0]} -eq 0 ]]; then
+    echo No files with uppercase extension letters found.
+    exit
+fi
+
+printf "These ${#files[@]} files will be affected:\n\n"
+printf '%s\n' "${files[@]}" ''
+read -p "These ${#files[@]} files will be affected. Continue? [y/N] " ans
+case $ans in y|Y) echo ;; *) exit 1 ;; esac
+
+for f in "${files[@]}"; do
+    ext=${f##*.}
+    mv -vn -- "$f" "${f%.*}.${ext,,}"
+done
+
+printf '\nDone.\n'

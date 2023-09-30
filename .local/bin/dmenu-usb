@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# script name: dm-usbmount
+# script name: dm-usb
 # Description: Mount/unmount usb drives using dmenu. No fancy daemon required.
 # Dependencies: dmenu, fzf, rofi, udisks2
 # Author: Murtaza Udaipurwala
@@ -10,34 +10,6 @@
 # if certain things happen, which is a good thing.  Otherwise, we can
 # get hidden bugs that are hard to discover.
 set -euo pipefail
-
-# shellcheck disable=SC1091
-source ./_dm-helper.sh 2>/dev/null || source _dm-helper.sh 2>/dev/null
-
-source_dmscripts_configs
-
-if configs_are_different; then
-    echo "$(date): configs are different" >>"$DM_CONFIG_DIFF_LOGFILE"
-    sleep 1
-fi
-
-help() {
-    printf '%s' "Usage: $(basename "$0") [options]
-$(grep '^# Description: ' "$0" | sed 's/# Description: /Description: /g')
-$(grep '^# Dependencies: ' "$0" | sed 's/# Dependencies: /Dependencies: /g')
-
-The folowing OPTIONS are accepted:
-    -h  displays this help page
-    -d  mount using 'dmenu'
-    -D  umount using 'dmenu'
-    -f  mount using 'fzf'
-    -F  umount using 'fzf'
-    -r  mount using 'rofi'
-    -R  umount using 'rofi'
-
-Running" " $(basename "$0") " "without any argument displays this help text.
-Run 'man dmscripts' for more information"
-}
 
 driveCount() {
     count="$(echo "$1" | wc -l)"

@@ -1,14 +1,10 @@
 #!/bin/sh
-
 # https://github.com/pystardust/waldl
-# script to find and download wallpapers from wallhaven
-version="0.0.1"
-
 # Usage:
 # 	waldl <query>
 # if query left empty then sh_menu will be used (dmenu by default)
 # after the thumbnails are cached, nsxiv would open up with the thumbnails
-# Select the wallpapers using `m` on the image. ( marking the image in nsxiv )
+# Select the wallpapers using `m` on the image.
 # press `q` to quit nsxiv, the marked images would start downloading
 
 ####################
@@ -17,29 +13,24 @@ version="0.0.1"
 
 [ -z $VIEWER ] && VIEWER=nsxiv
 # the dir where wallpapers are stored
-walldir="$HOME/.local/share/wallhaven"
+walldir="$HOME/img/wal"
 # the dir used to cache thumbnails
 cachedir="$HOME/.cache/wallhaven"
 # nsxiv options
-nsxiv_otps=" -tfpo -z 200" # o is needed for selection
+nsxiv_otps=" -tfpo -z 300" # o is needed for selection
 # number of pages to show in search results
 # each page contains 24 results
-max_pages=4
+max_pages=15
 # sorting : date_added, relevance, random, views, favorites, toplist
 sorting=relevance
 # quality : large original small
 quality=large
 # atleast : least res
-atleast=1920x1080
-
-# allow the user to customize the defaults
-[ -e "$HOME/.config/waldlrc" ] && . "$HOME/.config/waldlrc"
+atleast=1680x1050
 
 # the menu command used when no query is provided
 sh_menu () {
 	: | dmenu -p "search wallhaven:"
-	# ROFI: comment the previous line and uncomment the next line for rofi
-	# rofi -dmenu -l 0 -p "search wallpapers"
 }
 
 ##########################
@@ -63,15 +54,6 @@ sh_info () {
 	notify-send "wallhaven" "$1"
 	[ -n "$2" ] && exit "$2"
 }
-
-# dependency checking
-dep_ck () {
-	for pr; do
-		command -v $pr >/dev/null 2>&1 || sh_info "command $pr not found, install: $pr" 1
-	done
-}
-dep_ck "$VIEWER" "curl" "jq"
-
 
 # clean up command that would be called when the program exits
 clean_up () {

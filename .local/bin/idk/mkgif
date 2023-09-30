@@ -1,0 +1,25 @@
+#!/bin/sh
+# convert videos into high quality gifs.
+
+printf 'format (m: mp4, g: gif): '
+read fmt
+
+crop=$(ffmpeg -i "${1:?}" -vframes 30 -vf cropdetect -f null - 2>&1 |
+    grep -Eo 'crop=\S+' | uniq -c | sort -rn | awk '{print $2; exit}')
+
+case $fmt in
+m)
+    ffmpeg -v error -i "${1:?}" -vf "${crop:?},scale=-1:360" -c:v libx264 \
+        -preset veryslow -crf "${2:-30}" -an gif-$(date +%F-%H-%M-%S).mp4 ;;
+g)
+    filters="fps=${2:-24},${crop:?},scale=320:-1:flags=lanczos"
+    palette_gen="palettegen=stats_mode=diff"
+    palette_use="paletteuse=diff_mode=rectangle:dither=floyd_steinberg"
+    palette=$(mktemp --suffix=.png) || exit 1
+    trap 'rm -f "$palette"' EXIT
+    # generate a palttete, then use it to make the gif.
+    ffmpeg -v error -i "${1:?}" -vf "$filters,$palette_gen" "$palette" &&
+        ffmpeg -v error -i "${1:?}" -i "$palette" \
+        -lavfi "$filters [x]; [x][1:v] $palette_use" \
+        gif-$(date +%F-%H-%M-%S).gif ;;
+esac

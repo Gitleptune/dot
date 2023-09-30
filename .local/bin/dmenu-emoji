@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # emoji picker dmenu
-# dependencies
-## jq
-## xclip
-## dmenu
-## tr
-## /assets/emojis.json
+### dependencies ###
+# jq
+# xclip
+# dmenu
+# tr
+# /assets/emojis.json
 
 dir="$(dirname "$(realpath "$0")")/assets/emojis.json"
 path="$dir"

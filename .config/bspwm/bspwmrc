@@ -43,7 +43,6 @@ xsetroot -cursor_name left_ptr &
 unclutter --timeout 1 &
 pidof bspswallow || bspswallow &
 remap &
-mpd &
 pgrep -x sxhkd > /dev/null || sxhkd &
 vivaldi-stable &
 

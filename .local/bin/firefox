@@ -1,0 +1,3 @@
+#!/bin/sh
+
+HOME="${XDG_DATA_HOME:="$HOME/.local/share"}/firefox" "/usr/bin/firefox" "$@"

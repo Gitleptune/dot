@@ -1,10 +1,11 @@
 #!/bin/sh
-# font preview script with fzf
+# function
+## font preview script with fzf
 # dependencies
-##nsxiv
-##imagemagick
-##xdotool
-##fzf
+## nsxiv
+## imagemagick
+## xdotool
+## fzf
 
 SEARCH_PROMPT="🌻 > "
 SIZE=2500x2500

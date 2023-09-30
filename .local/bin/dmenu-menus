@@ -2,7 +2,7 @@
 
 script_path="$HOME/.local/bin"
 
-prompt="-p Menus:"
+prompt="-p Run:"
 
 # list only executable non-binary files
 

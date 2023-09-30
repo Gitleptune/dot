@@ -1,0 +1,67 @@
+#!/bin/sh
+
+# a file opener script.
+#
+# note: nsxiv's -F option requires the START_FROM_FILE_PATCH from nsxiv-flexipatch,
+# and the -E option requires this patch:
+# https://github.com/ghesy/nsxiv-flexipatch/commit/7422f2c?diff=unified
+
+[[ $# -eq 0 ]] && exit 1
+
+# go to the alternate buffer and clear the screen
+printf '\e[?1049h\e[H'
+
+# delay before exit to keep lf from crashing due to a known race condition:
+# https://github.com/gokcehan/lf/issues/621#issuecomment-841576897
+[ -n "$LF_LEVEL" ] && trap 'sleep 0.01' EXIT
+
+for arg; do
+    [[ -d $arg ]] && exit 1
+done
+
+# add the file to freq
+frequent --add "$1"
+
+ext=true
+case ${1,,} in
+    *.pro) kicad "$@" ;;
+    *.kicad_pcb|*.kicad_pcb-bak) pcbnew "$@" ;;
+    *.sch|*.sch-bak) eeschema "$@" ;;
+    *.azw3|*.mobi|*.fb[23]) foliate "$@" ;;
+    *.drawio) drawio "$@" ;;
+    *.xopp) xournalpp "$@" ;;
+    *) ext=false ;;
+esac || read -p 'Press enter to continue'
+[ $ext = true ] && exit
+
+mime=$(file -b --mime-type --dereference -- "$@") || {
+    echo "$mime"
+    read -p 'Press enter to continue'
+    exit 1
+}
+case $mime in
+    */pdf) zathura -- "$@" ;;
+    */epub*) zathura -- "$@" ;;
+    */x-xcf|*photoshop) nsixv -- "$@" ;;
+    video/*|audio/*|image/gif) mpv -- "$@" ;;
+    image/*)
+        readarray -t paths <<< "$(realpath -- "$@")"
+        nsxiv -ao"${paths[@]}" "$(dirname "${paths[0]}")" | { [ -n "$LF_LEVEL" ] && lfselect & }
+    ;;
+    */x-sc)
+        sc-im -- "$@"
+    ;;
+    text/*|*/json)
+        $EDITOR -- "$@"
+    ;;
+    */vnd.ms*|*/msword|*/vnd.openxml*|*opendoc*|*officedoc*)
+        libreoffice "$@"
+    ;;
+    */x-archive|*/x-compress|*/x-cpio|*/x-tar|*/x-bzip2|*/gzip|*/x-lz*|\
+    */x-xz|*/zstd|*/x-7z*|*/x-ace*|*/x-rar*|*/x-gtar|*/zip)
+        atool -lp -- "$@"
+    ;;
+    application/x-bittorrent)
+        transadd "$@"
+    ;;
+esac || read -p 'Press enter to continue'

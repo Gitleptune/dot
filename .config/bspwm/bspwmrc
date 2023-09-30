@@ -34,6 +34,7 @@ bspc rule -a Zathura state=fullscreen
 bspc rule -a Stremio desktop='^9' state=fullscreen follow=on
 bspc rule -a ripdrag state=floating focus=on
 bspc rule -a firefox desktop='^3' follow=on
+bspc rule -a cropgui state=floating focus=on
 
 pidof picom -b --config $HOME/.config/picom/picom.conf || picom -b --config $HOME/.config/picom/picom.conf &
 pidof dunst || /usr/bin/dunst &

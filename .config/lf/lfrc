@@ -203,7 +203,7 @@ cmd piko %piko $f
 
 cmd nsxiv-preview !nsxiv-preview $f
 
-cmd crop !cropgui $f
+cmd crop !devour cropgui $f
 
 
 ###########

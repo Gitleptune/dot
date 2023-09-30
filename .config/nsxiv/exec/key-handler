@@ -1,0 +1,21 @@
+#!/bin/sh
+
+while read file
+do
+  case "$1" in
+    "W")
+      cp "$file" $HOME/.config/wall.png && xwallpaper --zoom $HOME/.config/wall.png && notify-send "$file set to wallpaper" ;;
+    "r")
+      convert -rotate -90 "$file" "$file" ;;
+    "f")
+      convert -flop "$file" "$file" ;;
+    "y")
+      xclip -sel c -t image/png $file && notify-send "$file copied to clipboard" ;;
+    "s")
+      curl -F"file=@$file" https://0x0.st | xclip -selection c ;;
+    "q")
+      curl -F"file=@$file" https://0x0.st | qrencode -t "png" -o /tmp/qrsend.png | devour nsxiv --anti-alias=no -bqpz 400 /tmp/qrsend.png ;;
+    "d")
+      [ "$(printf "y\nn" | dmenu -p "delete $file?")" = "y" ] && rm "$file" && notify-send "$file deleted" ;;
+  esac
+done

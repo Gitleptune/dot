@@ -94,7 +94,7 @@ super + alt + shift + {h,j,k,l}
 # music is a script written by https://codeberg.org/exorcist that i edited to fit my needs
 
 XF86AudioPlay
-  music toggle && playerctl play-pause && notify-send -et 500 "Audio paused"
+  playerctl play-pause && notify-send -et 500 "Audio paused"
 
 XF86AudioRaiseVolume
   amixer -q set Master 3%+ unmute && vol

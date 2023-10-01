@@ -203,7 +203,7 @@ cmd piko %piko $f
 
 cmd nsxiv-preview !nsxiv-preview $f
 
-cmd crop !devour cropgui $f
+cmd crop !cropgui $f
 
 
 ###########
@@ -224,6 +224,7 @@ map gD cd /home/kyle/dls
 map gi cd /home/kyle/img
 map go cd /home/kyle/img/old
 map gw cd /home/kyle/img/wal
+map gS cd /home/kyle/img/scr
 map gv cd /home/kyle/vid
 map gm cd /home/kyle/mus
 map gr cd /
@@ -287,7 +288,7 @@ map sr :set reverse!
 map <c-o> !clear&&$f
 map <a-n> :mv-to-new-dir
 map <c-s> :calcdirsize
-map <c-x> :unarchive
+map <c-x> :extract
 map <esc> :{{unselect; clear;}}
 
 map <enter> open

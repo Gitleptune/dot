@@ -57,7 +57,6 @@ alias df='df -h'
 alias dir='dir --color'
 alias vdir='vdir --color'
 
-alias ..='cd ..'
 alias ...='cd ../..'
 alias .3='cd ../../..'
 alias .4='cd ../../../..'

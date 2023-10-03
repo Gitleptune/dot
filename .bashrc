@@ -30,7 +30,7 @@ alias vore='devour'
 alias vim='nvim'
 alias neovim='nvim'
 
-alias tracker='nvim ~/doc/notes/TRACKER.md'
+alias tracker='nvim ~/doc/nts/TRACKER.md'
 alias watchlist='nvim ~/doc/ani/watchlist.md'
 
 alias bsrc='nvim ~/.config/bspwm/bspwmrc'
@@ -79,6 +79,7 @@ alias ll='ls --color -lAv --ignore=..'   # show long listing of all except ".."
 alias grep="grep --color=auto"
 
 alias nsxivrand="find . -type f | shuf | nsxiv -ai -S 2.5"
+alias art="find ~/img/wal/pnt -type f | shuf | nsxiv -baif -S 15"
 alias nsexiv='nsxiv -a'
 alias nsxiv='nsxiv -a'
 alias sxiv='nsxiv -a'

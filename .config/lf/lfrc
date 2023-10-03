@@ -244,6 +244,8 @@ map mvv %mv $fx /home/kyle/vid
 map mvm %mv $fx /home/kyle/mus
 map mvr %mv $fx /
 
+map t   %mv $fx /home/kyle/tmp
+
 # unmap #
 map "$"
 map "%"

@@ -2,7 +2,7 @@
 \lf -server &
 
 rm /home/kyle/.xsession-errors &
-rm /home/kyle/.mozilla &
+rm -r /home/kyle/.mozilla &
 rm /home/kyle/screen-recording.mp4 &
 
 bspc monitor -d 1 2 3 4 5 6 7 8 9 10

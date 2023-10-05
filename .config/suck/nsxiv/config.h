@@ -1,23 +1,20 @@
 #ifdef INCLUDE_WINDOW_CONFIG
 
-/* default window dimensions (overwritten via -g option): */
+// default window dimensions (overwritten via -g option):
 static const int WIN_WIDTH  = 420;
 static const int WIN_HEIGHT = 460;
 
-/* colors and font can be overwritten via X resource properties.
- * See nsxiv(1), X(7) section Resources and xrdb(1) for more information.
- *                                      X resource            value (NULL == default) */
 static const char *WIN_BG[]   = { "Nsxiv.window.background",   "#261b17" };
 static const char *WIN_FG[]   = { "Nsxiv.window.foreground",   "#e35b15" };
-static const char *MARK_FG[]  = { "Nsxiv.mark.foreground",     "#e01d1d" };
+static const char *MARK_FG[]  = { "Nsxiv.mark.foreground",     "#fad256" };
 #if HAVE_LIBFONTS
 static const char *BAR_BG[]   = { "Nsxiv.bar.background",      "#1b110e" };
 static const char *BAR_FG[]   = { "Nsxiv.bar.foreground",      "#e4cbb3" };
 static const char *BAR_FONT[] = { "Nsxiv.bar.font",            "Fira Code-11" };
 
-/* if true, statusbar appears on top of the window */
+// if true, statusbar appears on top of the window
 static const bool TOP_STATUSBAR = false;
-#endif /* HAVE_LIBFONTS */
+#endif // HAVE_LIBFONTS
 
 #endif
 #ifdef INCLUDE_IMAGE_CONFIG
@@ -33,8 +30,12 @@ const char *const dmenu_cmd[] = {
  * (first/last value is used as min/max zoom level)
  */
 static const float zoom_levels[] = {
-   12.5,   25.0,   50.0,   75.0,
-	100.0,  125.0,  150.0,  175.0,
+   12.5,   15.0,   25.0,   30.0,
+   35.0,   40.0,   45.0,   55.0,
+   60.0,   65.0,   70.0,   80.0,
+   85.0,   95.0,   100.0,  105.0,
+	100.0,  110.0,  125.0,  140.0,
+	150.0,  165.0,  180.0,  195.0,
 	200.0,  225.0,  250.0,  275.0,
 	300.0,  325.0,  350.0,  375.0,
 	400.0,  500.0,  600.0,  700.0,

@@ -1,27 +1,8 @@
-/* Branchless UTF-8 decoder
- *
- * This is free and unencumbered software released into the public domain.
- */
 #ifndef UTF8_H
 #define UTF8_H
 
 #include <stdint.h>
 
-/* Decode the next character, C, from BUF, reporting errors in E.
- *
- * Since this is a branchless decoder, four bytes will be read from the
- * buffer regardless of the actual length of the next character. This
- * means the buffer _must_ have at least three bytes of zero padding
- * following the end of the data stream.
- *
- * Errors are reported in E, which will be non-zero if the parsed
- * character was somehow invalid: invalid byte sequence, non-canonical
- * encoding, or a surrogate half.
- *
- * The function returns a pointer to the next character. When an error
- * occurs, this pointer will be a guess that depends on the particular
- * error, but it will always advance at least one byte.
- */
 static void *
 utf8_decode(void *buf, uint32_t *c, int *e)
 {

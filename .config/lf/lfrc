@@ -227,6 +227,7 @@ map gw cd /home/kyle/img/wal
 map gS cd /home/kyle/img/scr
 map gv cd /home/kyle/vid
 map gm cd /home/kyle/mus
+map gM cd /run/media/kyle
 map gr cd /
 
 map mvs %mv $fx /home/kyle/.local/bin/idk

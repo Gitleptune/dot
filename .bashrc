@@ -25,15 +25,15 @@ bind 'TAB:menu-complete'
 alias hw='clear && javac hw.java && clear && java hw'
 alias deba='echo && cat ~/etc/deba && echo'
 
-alias vore='devour'
-
-alias vim='nvim'
-alias neovim='nvim'
-
 alias tracker='nvim ~/doc/cap/TRACKER.md'
 alias watchlist='nvim ~/doc/cap/WATCHLIST.md'
 alias dates='nvim ~/doc/cap/DATES.md'
 alias ideas='nvim ~/doc/cap/IDEAS.md'
+
+alias vore='devour'
+
+alias vim='nvim'
+alias neovim='nvim'
 
 alias bsrc='nvim ~/.config/bspwm/bspwmrc'
 alias brc='nvim ~/.bashrc'

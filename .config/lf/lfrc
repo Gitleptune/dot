@@ -199,7 +199,7 @@ cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
 
 cmd qr $curl -F"file=@$fx" https://0x0.st | qrencode -t "png" -o /tmp/qrsend.png | devour nsxiv --anti-alias=no -bqpz 400 /tmp/qrsend.png
 
-cmd piko %piko $f
+cmd piko !piko $f
 
 cmd nsxiv-preview !nsxiv-preview $f
 

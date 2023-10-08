@@ -7,7 +7,7 @@
  */
 static char *font = "Fira Code :pixelsize=15:antialias=true:autohint=true";
 static char *font2[] = { "Fira Code :pixelsize=15:antialias=true:autohint=true" };
-static int borderpx = 14;
+static int borderpx = 17;
 /* PADDING ^ */
 
 /*

@@ -1,2 +1,2 @@
 [filechooser]
-cmd=/usr/local/bin/lf-wrapper-xdg
+cmd=/home/kyle/.config/lf/lf-wrapper-xdg

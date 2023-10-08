@@ -437,8 +437,18 @@ static void update_info(void)
 			bar_put(r, "Loading... %0*d | ", fw, tns.loadnext + 1);
 		else if (tns.initnext < filecnt)
 			bar_put(r, "Caching... %0*d | ", fw, tns.initnext + 1);
-        bar_put(r, "%s[%0*d/%d]", mark, fw, fileidx + 1, filecnt); // right side thumb mode 
-		if (info.f.err) {
+    // ORIGINAL
+        //bar_put(r, "%s[%0*d/%d]", mark, fw, fileidx + 1, filecnt); // right side thumb mode 
+    // ORIGINAL
+    // MARKCOUNT PATCH END PT 2
+		if (MARK_COUNT && markcnt != 0)
+			bar_put(r, "[%s%0.d] | ", mark, markcnt);
+		else
+			bar_put(r, "%s | ", mark);
+    // MARKCOUNT PATCH END PT 1
+		bar_put(r, "%0*d/%d", fw, fileidx + 1, filecnt);
+    //
+		if (info.ft.err) {
       char* icon ="🌻 ";
       int icon_len = strlen(icon);
 
@@ -447,7 +457,15 @@ static void update_info(void)
       l->buf[l->size - 1] = '\0';
     }
 	} else {
-		bar_put(r, "%s", mark); // right before mark normal mode
+    // ORIGINAL
+		//bar_put(r, "%s", mark); // right before mark normal mode
+    // ORIGINAL
+    // BEGIN MARKCOUNT PATCH PT 2
+		if (MARK_COUNT && markcnt != 0)
+			bar_put(r, "[%s%0.d]", mark, markcnt);
+		else
+			bar_put(r, "%s", mark);
+    // END MARKCOUNT PATH PT 2
 		if (img.ss.on) {
 			if (img.ss.delay % 10 != 0)
 				bar_put(r, "%2.1fs" BAR_SEP, (float)img.ss.delay / 10);

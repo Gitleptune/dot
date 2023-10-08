@@ -17,6 +17,9 @@ static const bool TOP_STATUSBAR = false;
 #endif // HAVE_LIBFONTS
 
 #endif
+// MARKCOUNT PATCH
+static const bool MARK_COUNT = true;
+// MARKCOUNT PATCH
 #ifdef INCLUDE_IMAGE_CONFIG
 
 // DMENU PATCH

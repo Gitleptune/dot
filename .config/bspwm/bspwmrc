@@ -2,6 +2,8 @@
 \lf -server &
 
 rm /home/kyle/.xsession-errors &
+rm /home/kyle/.stremio-server &
+rm /home/kyle/.wget-hsts &
 rm -r /home/kyle/.mozilla &
 rm /home/kyle/screen-recording.mp4 &
 

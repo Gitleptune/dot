@@ -17,7 +17,7 @@ set inputbar-fg '#e4cbb3'
 set statusbar-bg '#1b110e'
 set statusbar-fg '#e4cbb3'
 set recolor-darkcolor '#e4ccb3'
-set recolor-lightcolor '#1b110e'
+set recolor-lightcolor '#261b17'
 set highlight-color '#f99666'
 set highlight-active-color '#f99666'
 set highlight-transparency 0.3

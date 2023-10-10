@@ -94,7 +94,7 @@ super + alt + shift + {h,j,k,l}
 # music is a script written by https://codeberg.org/exorcist that i edited to fit my needs
 
 XF86AudioPlay
-  playerctl play-pause && notify-send -et 500 "Audio paused"
+  playerctl play-pause && notify-send -et 500 "audio toggled"
 
 XF86AudioRaiseVolume
   amixer -q set Master 3%+ unmute && vol
@@ -103,5 +103,5 @@ XF86AudioLowerVolume
   amixer -q set Master 3%- unmute && vol
 
 XF86AudioMute
-  amixer -D pulse sset Master toggle-mute && notify-send -et 600 "Audio Muted"
+  amixer -D pulse sset Master toggle-mute && notify-send -et 600 "audio muted"
 # vim: ft=config
